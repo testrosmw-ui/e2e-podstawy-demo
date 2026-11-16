@@ -9,4 +9,7 @@ test('produktu niedostępnego nie da się dodać do koszyka', async ({ page }) =
 
   await expect(wiersz).toBeVisible();
   await expect(wiersz.getByText('Niedostępny')).toBeVisible();
+
+  // Przycisk dodawania do koszyka jest widoczny, ale zablokowany, więc produktu nie da się dodać.
+  await expect(wiersz.getByRole('button', { name: 'Dodaj do koszyka' })).toBeDisabled();
 });
