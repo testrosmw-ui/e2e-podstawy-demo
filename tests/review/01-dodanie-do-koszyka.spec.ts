@@ -21,3 +21,4 @@ test('dodanie balsamu do ciała do koszyka', async ({ page }) => {
   await expect(wiersz).toBeVisible();
   await expect(wiersz.getByRole('button', { name: 'Dodaj do koszyka' })).toBeEnabled();
 });
+// brak potwierdzenia o dodaniu produktu do koszyka

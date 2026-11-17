@@ -19,3 +19,4 @@ test('lista moich zamówień pokazuje ZAM-1004 jako nowe', async ({ page }) => {
   expect(numerWidoczny).toBe(true);
   await expect(page.getByRole('cell', { name: 'Nowe' }).first()).toBeVisible();
 });
+//niepotrzebna informacja o timeout 3000

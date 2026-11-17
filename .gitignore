@@ -8,3 +8,5 @@ playwright/.cache/
 .DS_Store
 .claude/settings.local.json
 app/*.local.mjs
+# Playwright CLI output (may contain credentials)
+.playwright-cli/

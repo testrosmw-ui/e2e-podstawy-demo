@@ -1,0 +1,50 @@
+- generic [active] [ref=f6e1]:
+  - banner [ref=f6e2]:
+    - generic [ref=f6e3]:
+      - link "namssor" [ref=f6e4] [cursor=pointer]:
+        - /url: /
+      - navigation "Menu główne" [ref=f6e8]:
+        - link "Produkty" [ref=f6e9] [cursor=pointer]:
+          - /url: /
+        - link "Koszyk" [ref=f6e10] [cursor=pointer]:
+          - /url: /koszyk
+        - link "Moje zamówienia" [ref=f6e11] [cursor=pointer]:
+          - /url: /zamowienia
+        - link "Adres dostawy" [ref=f6e12] [cursor=pointer]:
+          - /url: /konto/adres
+        - link "Moje adresy" [ref=f6e13] [cursor=pointer]:
+          - /url: /konto/adresy
+      - generic [ref=f6e14]:
+        - generic [ref=f6e15]: Zalogowano jako user (user)
+        - button "Wyloguj" [ref=f6e17] [cursor=pointer]
+  - main [ref=f6e18]:
+    - heading "Zmiana adresu dostawy" [level=1] [ref=f6e19]
+    - alert [ref=f6e20]: Popraw błędy w formularzu (1).
+    - generic [ref=f6e21]:
+      - paragraph [ref=f6e22]:
+        - generic [ref=f6e23]: Ulica i numer
+        - generic [ref=f6e24]: np. ul. Kwiatowa 5/2
+        - textbox "Ulica i numer" [ref=f6e25]: ul. Lipowa 7
+      - paragraph [ref=f6e26]:
+        - generic [ref=f6e27]: Kod pocztowy
+        - generic [ref=f6e28]: "Format: 00-000"
+        - textbox "Kod pocztowy" [invalid] [ref=f6e29]: "31001"
+        - generic [ref=f6e30]: Kod pocztowy musi mieć format 00-000
+      - paragraph [ref=f6e31]:
+        - generic [ref=f6e32]: Miasto
+        - textbox "Miasto" [ref=f6e33]: Kraków
+      - paragraph [ref=f6e34]:
+        - generic [ref=f6e35]: Telefon
+        - generic [ref=f6e36]: 9 cyfr, np. 500 100 200
+        - textbox "Telefon" [ref=f6e37]: 600 200 300
+      - button "Zapisz adres" [ref=f6e38] [cursor=pointer]
+  - contentinfo [ref=f6e39]:
+    - generic [ref=f6e40]: Namssor to fikcyjna drogeria do ćwiczeń z automatyzacji testów. Dane są przykładowe.
+    - generic [ref=f6e41]:
+      - text: Grzegorz Brzezinka, Prosit AS,
+      - link "https://agentgreg.ai" [ref=f6e42] [cursor=pointer]:
+        - /url: https://agentgreg.ai
+    - link "Regulamin" [ref=f6e43] [cursor=pointer]:
+      - /url: /regulamin
+    - link "API" [ref=f6e44] [cursor=pointer]:
+      - /url: /api/docs

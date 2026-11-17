@@ -1,0 +1,34 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "namssor" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation "Menu główne" [ref=e8]:
+        - link "Produkty" [ref=e9] [cursor=pointer]:
+          - /url: /
+        - link "Koszyk" [ref=e10] [cursor=pointer]:
+          - /url: /koszyk
+        - link "Moje zamówienia" [ref=e11] [cursor=pointer]:
+          - /url: /zamowienia
+      - link "Zaloguj" [ref=e13] [cursor=pointer]:
+        - /url: /logowanie
+  - main [ref=e14]:
+    - heading "Logowanie" [level=1] [ref=e15]
+    - generic [ref=e16]:
+      - paragraph [ref=e17]:
+        - generic [ref=e18]: Login
+        - textbox "Login" [ref=e19]
+      - paragraph [ref=e20]:
+        - generic [ref=e21]: Hasło
+        - textbox "Hasło" [ref=e22]
+      - button "Zaloguj" [ref=e23] [cursor=pointer]
+  - contentinfo [ref=e24]:
+    - generic [ref=e25]: Namssor to fikcyjna drogeria do ćwiczeń z automatyzacji testów. Dane są przykładowe.
+    - generic [ref=e26]:
+      - text: Grzegorz Brzezinka, Prosit AS,
+      - link "https://agentgreg.ai" [ref=e27] [cursor=pointer]:
+        - /url: https://agentgreg.ai
+    - link "Regulamin" [ref=e28] [cursor=pointer]:
+      - /url: /regulamin
+    - link "API" [ref=e29] [cursor=pointer]:
+      - /url: /api/docs

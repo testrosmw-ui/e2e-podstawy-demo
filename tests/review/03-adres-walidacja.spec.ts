@@ -24,3 +24,4 @@ test('błędny kod pocztowy blokuje zapis adresu', async ({ page }) => {
   await expect(page.getByRole('alert')).toContainText('Popraw błędy');
   await expect(page.getByRole('alert')).toHaveClass('error');
 });
+// brak komunikatu Kod pocztowy musi mieć format 00-000

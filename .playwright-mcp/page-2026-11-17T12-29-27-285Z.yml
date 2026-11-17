@@ -1,0 +1,48 @@
+- generic [active] [ref=f7e1]:
+  - banner [ref=f7e2]:
+    - generic [ref=f7e3]:
+      - link "namssor" [ref=f7e4] [cursor=pointer]:
+        - /url: /
+      - navigation "Menu główne" [ref=f7e8]:
+        - link "Produkty" [ref=f7e9] [cursor=pointer]:
+          - /url: /
+        - link "Koszyk" [ref=f7e10] [cursor=pointer]:
+          - /url: /koszyk
+        - link "Moje zamówienia" [ref=f7e11] [cursor=pointer]:
+          - /url: /zamowienia
+        - link "Adres dostawy" [ref=f7e12] [cursor=pointer]:
+          - /url: /konto/adres
+        - link "Moje adresy" [ref=f7e13] [cursor=pointer]:
+          - /url: /konto/adresy
+      - generic [ref=f7e14]:
+        - generic [ref=f7e15]: Zalogowano jako user (user)
+        - button "Wyloguj" [ref=f7e17] [cursor=pointer]
+  - main [ref=f7e18]:
+    - heading "Zmiana adresu dostawy" [level=1] [ref=f7e19]
+    - generic [ref=f7e20]:
+      - paragraph [ref=f7e21]:
+        - generic [ref=f7e22]: Ulica i numer
+        - generic [ref=f7e23]: np. ul. Kwiatowa 5/2
+        - textbox "Ulica i numer" [ref=f7e24]: ul. Lipowa 7
+      - paragraph [ref=f7e25]:
+        - generic [ref=f7e26]: Kod pocztowy
+        - generic [ref=f7e27]: "Format: 00-000"
+        - textbox "Kod pocztowy" [ref=f7e28]: 31-001
+      - paragraph [ref=f7e29]:
+        - generic [ref=f7e30]: Miasto
+        - textbox "Miasto" [ref=f7e31]: Kraków
+      - paragraph [ref=f7e32]:
+        - generic [ref=f7e33]: Telefon
+        - generic [ref=f7e34]: 9 cyfr, np. 500 100 200
+        - textbox "Telefon" [ref=f7e35]: 600 200 300
+      - button "Zapisz adres" [ref=f7e36] [cursor=pointer]
+  - contentinfo [ref=f7e37]:
+    - generic [ref=f7e38]: Namssor to fikcyjna drogeria do ćwiczeń z automatyzacji testów. Dane są przykładowe.
+    - generic [ref=f7e39]:
+      - text: Grzegorz Brzezinka, Prosit AS,
+      - link "https://agentgreg.ai" [ref=f7e40] [cursor=pointer]:
+        - /url: https://agentgreg.ai
+    - link "Regulamin" [ref=f7e41] [cursor=pointer]:
+      - /url: /regulamin
+    - link "API" [ref=f7e42] [cursor=pointer]:
+      - /url: /api/docs

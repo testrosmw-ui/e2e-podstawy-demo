@@ -25,3 +25,6 @@ test('kod CZARNY20 zostaje przyjęty w koszyku', async ({ page }) => {
   // Sprzątanie: żel wraca z koszyka
   await page.getByRole('button', { name: 'Usuń: Żel pod prysznic' }).click();
 });
+// brak komunikatu o dodaniu produktu do koszyka
+// brak sprawdzenia czy kod sie naliczył
+// brak info czy kod został dodany

@@ -1,0 +1,48 @@
+- generic [active] [ref=f3e1]:
+  - banner [ref=f3e2]:
+    - generic [ref=f3e3]:
+      - link "namssor" [ref=f3e4] [cursor=pointer]:
+        - /url: /
+      - navigation "Menu główne" [ref=f3e8]:
+        - link "Produkty" [ref=f3e9] [cursor=pointer]:
+          - /url: /
+        - link "Koszyk" [ref=f3e10] [cursor=pointer]:
+          - /url: /koszyk
+        - link "Moje zamówienia" [ref=f3e11] [cursor=pointer]:
+          - /url: /zamowienia
+        - link "Adres dostawy" [ref=f3e12] [cursor=pointer]:
+          - /url: /konto/adres
+        - link "Moje adresy" [ref=f3e13] [cursor=pointer]:
+          - /url: /konto/adresy
+      - generic [ref=f3e14]:
+        - generic [ref=f3e15]: Zalogowano jako user (user)
+        - button "Wyloguj" [ref=f3e17] [cursor=pointer]
+  - main [ref=f3e18]:
+    - heading "Zmiana adresu dostawy" [level=1] [ref=f3e19]
+    - generic [ref=f3e20]:
+      - paragraph [ref=f3e21]:
+        - generic [ref=f3e22]: Ulica i numer
+        - generic [ref=f3e23]: np. ul. Kwiatowa 5/2
+        - textbox "Ulica i numer" [ref=f3e24]: ul. Przykładowa 12/3
+      - paragraph [ref=f3e25]:
+        - generic [ref=f3e26]: Kod pocztowy
+        - generic [ref=f3e27]: "Format: 00-000"
+        - textbox "Kod pocztowy" [ref=f3e28]: 00-000
+      - paragraph [ref=f3e29]:
+        - generic [ref=f3e30]: Miasto
+        - textbox "Miasto" [ref=f3e31]: Warszawa
+      - paragraph [ref=f3e32]:
+        - generic [ref=f3e33]: Telefon
+        - generic [ref=f3e34]: 9 cyfr, np. 500 100 200
+        - textbox "Telefon" [ref=f3e35]: 500 100 200
+      - button "Zapisz adres" [ref=f3e36] [cursor=pointer]
+  - contentinfo [ref=f3e37]:
+    - generic [ref=f3e38]: Namssor to fikcyjna drogeria do ćwiczeń z automatyzacji testów. Dane są przykładowe.
+    - generic [ref=f3e39]:
+      - text: Grzegorz Brzezinka, Prosit AS,
+      - link "https://agentgreg.ai" [ref=f3e40] [cursor=pointer]:
+        - /url: https://agentgreg.ai
+    - link "Regulamin" [ref=f3e41] [cursor=pointer]:
+      - /url: /regulamin
+    - link "API" [ref=f3e42] [cursor=pointer]:
+      - /url: /api/docs

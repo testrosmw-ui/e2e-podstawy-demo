@@ -8,5 +8,11 @@ test('wyszukiwarka znajduje szampon nawilżający', async ({ page }) => {
   await page.getByLabel('Szukaj produktu').fill('szampon');
   await page.getByRole('button', { name: 'Filtruj' }).click();
 
-  await expect(page.getByRole('cell', { name: 'Szampon' })).toBeVisible();
+  await expect(
+  page.getByRole('cell', { name: 'Szampon nawilżający', exact: true })
+).toBeVisible();
+
 });
+
+
+

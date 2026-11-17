@@ -1,3 +1,4 @@
+
 import { test, expect } from '@playwright/test';
 
 // Ćwiczenie 06, część B: płatność w ramce (iframe).
@@ -24,19 +25,48 @@ test.beforeEach(async ({ page }) => {
   await expect(page.getByText('Dodano do koszyka: Maseczka glinkowa')).toBeVisible();
 });
 
-test.fixme('karta odrzucona przez bank pokazuje komunikat w ramce', async ({ page }) => {
-  // TODO 1: otwórz /koszyk/platnosc i wejdź do ramki „Bramka płatnicza”.
-  // TODO 2: wpisz kartę 4000 0000 0000 0002 i kliknij „Zapłać” (oba elementy są w ramce).
-  // TODO 3: sprawdź komunikat w ramce (rola alert): „Płatność odrzucona przez bank. Użyj innej karty.”
-  // TODO 4: sprzątanie: w /koszyk kliknij „Usuń: Maseczka glinkowa” i sprawdź, że wiersza już nie ma.
+test('karta odrzucona przez bank pokazuje komunikat w ramce', async ({ page }) => {
+  // 1. Strona płatności i wejście do ramki
+  await page.goto('/koszyk/platnosc');
+  const bramka = page.getByTitle('Bramka płatnicza').contentFrame();
+
+  // 2. Karta odrzucana przez bank; pole i przycisk są w ramce
+  await bramka.getByLabel('Numer karty').fill('4000 0000 0000 0002');
+  await bramka.getByRole('button', { name: 'Zapłać' }).click();
+
+  // 3. Komunikat też jest w ramce
+  await expect(bramka.getByRole('alert')).toHaveText('Płatność odrzucona przez bank. Użyj innej karty.');
+
+  // 4. Sprzątanie: płatność nie przeszła, więc produkt został w koszyku
+  await page.goto('/koszyk');
+  await page.getByRole('button', { name: 'Usuń: Maseczka glinkowa' }).click();
+  await expect(page.getByRole('row').filter({ hasText: 'Maseczka glinkowa' })).toHaveCount(0);
 });
 
-test.fixme('przyjęta płatność daje numer zamówienia', async ({ page, request }) => {
-  // TODO 1: otwórz /koszyk/platnosc, w ramce wpisz kartę 4111 1111 1111 1111 i kliknij „Zapłać”.
-  // TODO 2: sprawdź nagłówek „Płatność przyjęta” w ramce.
-  // TODO 3: sprawdź numer zamówienia (getByTestId('payment-order')) wyrażeniem /^ZAM-\d+(, ZAM-\d+)*$/.
-  //   Jedno zamówienie na każdą pozycję koszyka, numery po przecinku.
-  // TODO 4: sprzątanie: zaloguj się przez API jako admin i anuluj każde z tych zamówień:
-  //   POST /api/admin/orders/<numer>/cancel, oczekiwany status 200.
-  //   Tekst z locatora weźmiesz przez: await numery.innerText()
+test('przyjęta płatność daje numer zamówienia', async ({ page, request }) => {
+  // 1. Płatność kartą, która przechodzi
+  await page.goto('/koszyk/platnosc');
+  const bramka = page.getByTitle('Bramka płatnicza').contentFrame();
+  await bramka.getByLabel('Numer karty').fill('4111 1111 1111 1111');
+  await bramka.getByRole('button', { name: 'Zapłać' }).click();
+
+  // 2. Nagłówek po płatności (w ramce)
+  await expect(bramka.getByRole('heading', { name: 'Płatność przyjęta' })).toBeVisible();
+
+  // 3. Numery zamówień: jeden na pozycję koszyka, po przecinku
+  const numery = bramka.getByTestId('payment-order');
+  await expect(numery).toHaveText(/^ZAM-\d+(, ZAM-\d+)*$/);
+
+  // 4. Sprzątanie przez API: admin anuluje każde zamówienie
+  const listaNumerow = (await numery.innerText()).split(', ');
+
+  const logowanie = await request.post('/api/login', { data: { login: 'admin', password: 'admin123' } });
+  const { token } = await logowanie.json();
+
+  for (const numer of listaNumerow) {
+    const odpowiedz = await request.post(`/api/admin/orders/${numer}/cancel`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    expect(odpowiedz.status()).toBe(200);
+  }
 });
