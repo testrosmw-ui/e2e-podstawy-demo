@@ -38,13 +38,30 @@ test.describe('API zamówień', () => {
     //   POST /api/admin/orders/<numer>/cancel (oczekiwany status 200)
   });
 
-  test.fixme('POST /api/orders z ilością 0 zwraca 400 z błędem pola qty', async ({ request }) => {
-    // TODO: zaloguj się jako user, wyślij { product_id: 20, qty: 0 }.
-    // Sprawdź status 400 i całą treść odpowiedzi: pole „error” i listę „errors” z polami field i message.
+  test('POST /api/orders z ilością 0 zwraca 400 z błędem pola qty', async ({ request }) => {
+    const logowanie = await request.post('/api/login', { data: { login: 'user', password: 'user123' } });
+    expect(logowanie.status()).toBe(200);
+    const { token } = await logowanie.json();
+
+    const odpowiedz = await request.post('/api/orders', {
+      headers: { Authorization: `Bearer ${token}` },
+      data: { product_id: 20, qty: 0 },
+    });
+
+    // Cała treść: ogólny błąd i dokładnie jeden błąd pola qty
+    expect(odpowiedz.status()).toBe(400);
+    expect(await odpowiedz.json()).toEqual({
+      error: 'Błędne dane',
+      errors: [{ field: 'qty', message: 'Ilość musi być liczbą całkowitą od 1 do 10' }],
+    });
   });
 
-  test.fixme('GET /api/orders bez logowania zwraca 401', async ({ request }) => {
-    // TODO: wyślij żądanie bez tokena, sprawdź status 401 i treść { error: '...' }
+  test('GET /api/orders bez logowania zwraca 401', async ({ request }) => {
+    // Żądanie bez nagłówka Authorization
+    const odpowiedz = await request.get('/api/orders');
+
+    expect(odpowiedz.status()).toBe(401);
+    expect(await odpowiedz.json()).toEqual({ error: 'Wymagane logowanie' });
   });
 
   test.fixme('GET /api/orders/ZAM-9999 zwraca 404', async ({ request }) => {
@@ -57,18 +74,48 @@ test.describe('Anulowanie zamówienia przygotowanego przez API', () => {
   let numer: string;
 
   test.beforeEach(async ({ request }) => {
-    // TODO 1: zaloguj się przez API jako user, utwórz zamówienie { product_id: 20, qty: 1 },
-    //   sprawdź status 201 i zapisz numer: numer = (await odpowiedz.json()).number;
+    // Dane do testu: nowe zamówienie klienta user, założone przez API
+    const logowanie = await request.post('/api/login', { data: { login: 'user', password: 'user123' } });
+    expect(logowanie.status()).toBe(200);
+    const { token } = await logowanie.json();
+
+    const odpowiedz = await request.post('/api/orders', {
+      headers: { Authorization: `Bearer ${token}` },
+      data: { product_id: 20, qty: 1 },
+    });
+    expect(odpowiedz.status()).toBe(201);
+    numer = (await odpowiedz.json()).number;
   });
 
   test.afterEach(async ({ request }) => {
-    // TODO 2: sprzątanie. Zaloguj się przez API jako admin i anuluj zamówienie `numer`.
-    //   Gdy test już je anulował, API odpowie 409. Oba statusy (200 i 409) są tu w porządku.
+    // Sprzątanie także po nieudanym teście: anulowanie oddaje towar na stan.
+    const logowanie = await request.post('/api/login', { data: { login: 'admin', password: 'admin123' } });
+    expect(logowanie.status()).toBe(200);
+    const { token } = await logowanie.json();
+
+    const odpowiedz = await request.post(`/api/admin/orders/${numer}/cancel`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    // 200: anulowaliśmy teraz. 409: test już je anulował. Oba są w porządku.
+    expect([200, 409]).toContain(odpowiedz.status());
   });
 
-  test.fixme('admin anuluje nowe zamówienie w panelu', async ({ page }) => {
-    // TODO 3: zaloguj się w przeglądarce jako admin, otwórz /admin/zamowienia
-    // TODO 4: znajdź wiersz po numerze `numer`, sprawdź status „Nowe”, kliknij „Anuluj”
-    // TODO 5: sprawdź komunikat „Anulowano zamówienie <numer>” i status „Anulowane” w wierszu
+  test('admin anuluje nowe zamówienie w panelu', async ({ page }) => {
+    await page.goto('/logowanie');
+    await page.getByLabel('Login').fill('admin');
+    await page.getByLabel('Hasło').fill('admin123');
+    await page.getByRole('button', { name: 'Zaloguj' }).click();
+    await expect(page.getByText('Zalogowano jako admin (admin)')).toBeVisible();
+
+    await page.goto('/admin/zamowienia');
+    // Wiersz zamówienia z beforeEach, znaleziony po numerze
+    const wiersz = page.getByRole('row').filter({ hasText: numer });
+    await expect(wiersz.getByRole('cell', { name: 'Nowe', exact: true })).toBeVisible();
+    await wiersz.getByRole('button', { name: 'Anuluj' }).click();
+
+    await expect(page.getByText(`Anulowano zamówienie ${numer}`, { exact: true })).toBeVisible();
+    await expect(wiersz.getByRole('cell', { name: 'Anulowane', exact: true })).toBeVisible();
+    // Anulowanego zamówienia nie da się anulować drugi raz
+    await expect(wiersz.getByRole('button', { name: 'Anuluj' })).toHaveCount(0);
   });
 });
