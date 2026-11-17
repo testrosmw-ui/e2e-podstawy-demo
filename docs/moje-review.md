@@ -40,3 +40,38 @@ Plan: testy zmiany adresu dostawy na podstawie `docs/scenariusze/zmiana-adresu.m
 9. **Nazwy i komentarze z numerem przypadku.** W komentarzu nad testem podaj, co test sprawdza: `// TC-ADR-01` przy T1, `// TC-ADR-02 i .feature, przykład 1` przy T2 itd. (lista kontrolna, pyt. 1).
 10. **Weryfikacja, że test potrafi paść.** Dopisz do planu: (a) uruchom plik dwa razy pod rząd, za każdym razem `4 passed`; (b) zmień na chwilę oczekiwany komunikat w T2 i uruchom, ma być `1 failed`; (c) po teście otwórz „Adres dostawy” jako `user` i sprawdź, że Miasto to „Warszawa” (lista kontrolna, pyt. 9 i 12; kryterium „gotowe”).
 11. **Pozostałe pomysły z sekcji 5 planu (+48, dwa błędy naraz, test API) poza zakresem.** Nie ma ich w przypadku testowym. Nie dopisujemy ich do tego pliku.
+
+## Ćwiczenie 08 część B: porównanie formatów
+
+Porównanie `docs/scenariusze/biuro-mikolaja.md` (TC-FV-01, Azure Test Plans) z `docs/scenariusze/biuro-mikolaja.feature` (Gherkin). Numery linii dotyczą pliku `.feature`.
+
+### Kroki z Azure Test Plans i linie w Gherkinie
+
+| Krok w Azure Test Plans | Linia w `.feature` | Różnica |
+|---|---|---|
+| 1. Zaloguj się jako `@klient` → „Zalogowano jako biuro (user)” | 8 (`Zakładając, że jestem zalogowany jako "biuro"…`) | Gherkin nie ma oczekiwanego wyniku (napisu w nagłówku). Logowanie jest tylko założeniem |
+| (warunek wstępny: koszyk pusty) | 9 (`Oraz mój koszyk jest pusty`) | W Azure tylko jako warunek wstępny, w Gherkinie jako krok założeń |
+| 2. Karta produktu, „Ilość” 10, „Dodaj do koszyka” → „Dodano do koszyka: Kalendarz adwentowy 2026” | 12 | Gherkin nie ma komunikatu „Dodano do koszyka: …” ani nazwy pola „Ilość” |
+| 3. Otwórz „Koszyk” → jedna pozycja, ilość 10, „Pozycji: 1, razem: 399,90 zł” | brak | W Gherkinie nie ma sprawdzenia koszyka |
+| 4. „Faktura na firmę”, NIP, nazwa firmy, „Złóż zamówienie (płatność przy odbiorze)” → „Złożono zamówienie: ZAM-…” | 13–17 | Brak. Gherkin podaje dokładne etykiety pól („NIP”, „Nazwa firmy”) |
+| 5. Kliknij numer na liście „Moje zamówienia” → status „Nowe”, „Faktura na firmę: Biuro Mikołaja, NIP 2412241228”, przycisk „Pobierz fakturę” | 18 | Gherkin nie mówi, jak otworzyć zamówienie, i nie sprawdza nazwy firmy ani przycisku „Pobierz fakturę” |
+| 6. Wyloguj, zaloguj jako `admin`, `/admin/zamowienia/<numer>` → status „Nowe”, pole „Status zamówienia” | 19 (częściowo) | Gherkin nie mówi o wylogowaniu, koncie i haśle admina ani o adresie strony. Brak oczekiwanego wyniku |
+| 7. Status „Opłacone”, „Zapisz status” → status „Opłacone” | 19 | Brak asercji po zmianie na „Opłacone” i przycisku „Zapisz status” |
+| 8. Status „Wysłane”, „Zapisz status” → status „Wysłane” | 19 | Brak asercji w panelu admina |
+| 9. Wyloguj, zaloguj jako `@klient`, otwórz zamówienie → status „Wysłane” | 20 | Gherkin nie mówi o ponownym zalogowaniu jako `biuro` |
+| 10. „Pobierz fakturę” → `faktura-<numer>.html`, „NIP nabywcy: 2412241228”, nabywca „Biuro Mikołaja”, pozycja 10 × 39,99 zł = 399,90 zł, „Razem do zapłaty: 399,90 zł” | 21–27 | Gherkin nie sprawdza nabywcy „Biuro Mikołaja” na fakturze |
+| Po teście: zamówienie zostaje jako „Wysłane”, stan przywraca `npm run db:reset` | brak | Gherkin nie mówi o stanie po teście |
+
+### Czego brakuje w Gherkinie
+
+- Oczekiwanych wyników kroków pośrednich: napisu po zalogowaniu (krok 1), komunikatu „Dodano do koszyka: …” (krok 2) i całego sprawdzenia koszyka z sumą 399,90 zł (krok 3).
+- Nazwy firmy „Biuro Mikołaja” na stronie zamówienia (krok 5) i na fakturze (krok 10). Gherkin sprawdza tylko NIP, a księgowej zależy na danych nabywcy.
+- Szczegółów kroków admina (kroki 6–8): konta `admin` / `admin123`, adresu `/admin/zamowienia/<numer>`, pola „Status zamówienia”, przycisku „Zapisz status” i statusu po każdej zmianie. Linia 19 łączy trzy kroki w jedno zdanie bez asercji.
+- Wylogowania i ponownego zalogowania jako `biuro` (krok 9).
+- Informacji o stanie po teście (zamówienie zostaje w bazie, `npm run db:reset`).
+
+### Czego brakuje w krokach Azure Test Plans
+
+- Dokładnych etykiet pól faktury. Azure pisze „wpisz NIP `@nip` i nazwę firmy `@firma`”, a Gherkin w tabeli w liniach 14–15 podaje etykiety „NIP” i „Nazwa firmy”.
+- Układu pozycji na fakturze. W Azure wartości są wymienione w zdaniu („ilość 10, cena 39,99 zł, wartość 399,90 zł”). Gherkin w liniach 25–26 podaje tabelę z kolumnami „Nazwa | Ilość | Cena | Wartość”, więc wiadomo, która wartość jest w której kolumnie.
+- Krótkiego opisu, kto i po co korzysta z funkcji (linie 3–4: klient firmowy zamawia na fakturę, admin zmienia status, klient pobiera fakturę z NIP-em). Azure ma tylko tytuł.
