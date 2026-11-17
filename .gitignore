@@ -10,3 +10,5 @@ playwright/.cache/
 app/*.local.mjs
 # Playwright CLI output (may contain credentials)
 .playwright-cli/
+# Playwright MCP output (zrzuty stron z przeglądarki Claude)
+.playwright-mcp/
