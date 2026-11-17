@@ -75,3 +75,12 @@ Porównanie `docs/scenariusze/biuro-mikolaja.md` (TC-FV-01, Azure Test Plans) z 
 - Dokładnych etykiet pól faktury. Azure pisze „wpisz NIP `@nip` i nazwę firmy `@firma`”, a Gherkin w tabeli w liniach 14–15 podaje etykiety „NIP” i „Nazwa firmy”.
 - Układu pozycji na fakturze. W Azure wartości są wymienione w zdaniu („ilość 10, cena 39,99 zł, wartość 399,90 zł”). Gherkin w liniach 25–26 podaje tabelę z kolumnami „Nazwa | Ilość | Cena | Wartość”, więc wiadomo, która wartość jest w której kolumnie.
 - Krótkiego opisu, kto i po co korzysta z funkcji (linie 3–4: klient firmowy zamawia na fakturę, admin zmienia status, klient pobiera fakturę z NIP-em). Azure ma tylko tytuł.
+
+## Ćwiczenie 10: skill test-e2e
+
+Test `tests/cwiczenia/10-filtr-kategorii.spec.ts` napisany przez `/test-e2e`. Przeszedł listą kontrolną bez „nie”: liczba wierszy i licznik padają bez filtra (21 zamiast 3), z liczbą 4 test dał `1 failed`. Wniosek dla skilla: krok 2 (przejście w przeglądarce) wykrył sekcję „Oferta na Czarny Piątek” z kartami produktów, więc liczymy tylko w tabeli.
+
+### Marketplace skilli
+
+- **Kto byłby właścicielem skilla?** Zespół QA, a w nim jedna wskazana osoba (opiekun repo testów). Ona zatwierdza zmiany i odpowiada za to, że skill pasuje do aktualnego `CLAUDE.md` i listy kontrolnej.
+- **Jak zgłosić poprawkę, gdy skill napisze zły test?** Zgłoszenie (issue albo pull request) w repo marketplace: nazwa i wersja skilla, polecenie, którym go wywołano, zły test i punkt listy kontrolnej, który nie przeszedł, oraz propozycja zmiany kroku w `SKILL.md` jako polecenia. Opiekun robi review, zmienia skill i wydaje nową wersję dla całego zespołu.
