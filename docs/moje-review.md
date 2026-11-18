@@ -139,3 +139,19 @@ Test: tests/projekt/p16-ilosc-z-karty.spec.ts › P16: ilość z karty produktu 
 ```
 
 Uwaga: hotfix nie był „tylko tekstami”. Zmiana tekstów popsuła 15 testów w 14 plikach, bo te same napisy stoją w wielu plikach.
+
+## Ćwiczenie 12: spotkanie „wydajemy czy nie” (szkic, 5 minut)
+
+**1. Co pokrywa pakiet (1,5 min).** `tests/projekt/`: 9 scenariuszy, 16 testów. E2E: P2 (koszyk wymaga logowania), P4 (brak uprawnień do panelu), P9 (cena promocyjna w 3 miejscach), P11 (kody rabatowe), P15 (statusy w panelu admina), P16 (ilość z karty). API: P5 (katalog), P13 (odliczanie, 26.11 i 27.11 po zmianie Bożeny), P14 (zamówienie firmowe i faktura). `--repeat-each=3`: 48 passed. Nie pokrywamy: P1, P3, P6–P8, P10, P12 (brak czasu; P10 częściowo w ćwiczeniu 08 „Biuro Mikołaja”). Testy z kontem admin (P14, P15) biegną tylko lokalnie.
+
+**2. Co znaleźliśmy (2 min).**
+- Polowanie na `rc` (konto tester08): 6 zaliczonych błędów: wygasły kod JESIEN10 przyjęty (#2), NIP sprzedawcy na fakturze zamiast NIP-u nabywcy (#3), sortowanie po cenie jak tekst (#5), kod pocztowy 00950 w „Moich adresach” (#6), nowy adres sam domyślny (#7), 200 i `{}` zamiast 404 dla nieistniejącego zamówienia (#8). Do tego 2 niespodzianki. Podwójna promocja w koszyku (krem 21,11 zł zamiast 26,39 zł) nie zaliczona przez trenera.
+- Hotfix Mirka: nie tylko teksty. Suma „razem” w koszyku liczy 1 sztukę: 24 kalendarze = 39,99 zł zamiast 959,76 zł. Test: `p16-ilosc-z-karty.spec.ts` (failed na hotfix, passed bez niego).
+- Review krzyżowe: (uzupełnić po 13:30).
+
+**3. Rekomendacja (1 min): nie wydajemy ani `rc`, ani hotfiksu.**
+- Hotfix: test „24 kalendarze adwentowe z karty produktu dają w koszyku ilość 24 i wartość 959,76 zł” jest czerwony: klient Biura Mikołaja zapłaciłby za 1 kalendarz zamiast 24.
+- `rc`: test „faktura zamówienia firmowego ma NIP nabywcy z zamówienia, a nie NIP sprzedawcy” jest czerwony: dokładnie to, o co prosiła księgowa Biura.
+- Wydajemy, gdy oba testy będą zielone na nowej wersji i pakiet `tests/projekt` przejdzie 3 razy pod rząd.
+
+**Pokaz:** P16 zielony na wersji zwykłej (`npx playwright test tests/projekt/p16`) i czerwony z `$env:APP_VERSION="hotfix"` (aplikacja uruchomiona z tą zmienną).
