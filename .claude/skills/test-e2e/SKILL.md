@@ -15,7 +15,7 @@ Zasady pisania kodu są w `CLAUDE.md`. Ta procedura mówi tylko, w jakiej kolejn
    Logowanie w przeglądarce rób funkcją `zaloguj` z `tests/pomocnicze/logowanie.ts`, nigdy przez wpisywanie loginu i hasła w teście:
    - import: `import { zaloguj } from '../pomocnicze/logowanie';`
    - klient: `await zaloguj(page);`. Konto bierze się z `APP_USER` i `APP_PASSWORD` (plik `.env` albo `$env:` w oknie), domyślnie `user` / `user123`.
-   - administrator: `await zaloguj(page, process.env.APP_ADMIN_USER ?? 'admin', process.env.APP_ADMIN_PASSWORD ?? 'admin123');`
+   - administrator: `await zalogujJakoAdmin(page);` (import z tego samego pliku). Konto bierze się z `APP_ADMIN_USER` i `APP_ADMIN_PASSWORD`, domyślnie `admin` / `admin123`.
    - testy API: `await zalogujPrzezApi(request);` z tego samego pliku.
    Po `zaloguj` jesteś na stronie głównej, więc przejdź na stronę testu przez `page.goto(...)`.
 5. Uruchom `npm run typecheck`. Popraw błędy w swoim pliku.

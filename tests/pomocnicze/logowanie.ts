@@ -22,6 +22,13 @@ export async function zaloguj(page: Page, login = domyslnyLogin(), haslo = domys
   await expect(page.getByText(`Zalogowano jako ${login}`)).toBeVisible();
 }
 
+// Logowanie administratora: konto ze zmiennych APP_ADMIN_USER i APP_ADMIN_PASSWORD
+// (plik .env albo $env: w oknie), a gdy ich nie ma, konto demo admin / admin123.
+// Wywołanie w teście: await zalogujJakoAdmin(page);
+export async function zalogujJakoAdmin(page: Page) {
+  await zaloguj(page, process.env.APP_ADMIN_USER || 'admin', process.env.APP_ADMIN_PASSWORD || 'admin123');
+}
+
 // Logowanie w testach API. Po nim `request` wysyła ciasteczko sesji w kolejnych żądaniach.
 // Wywołanie w teście: await zalogujPrzezApi(request);
 export async function zalogujPrzezApi(request: APIRequestContext, login = domyslnyLogin(), haslo = domyslneHaslo()) {
