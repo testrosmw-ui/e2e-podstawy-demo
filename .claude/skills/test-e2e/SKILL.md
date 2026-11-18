@@ -40,3 +40,5 @@ Przeczytaj je przed krokiem 3 i uwzględnij w planie.
 - Gdy sprzątanie jest niemożliwe (wysłanego zamówienia nie da się anulować), napisz w komentarzu nad testem, co zostaje w bazie po każdym przebiegu (P15).
 - Wartość, której wymaganie nie podaje wprost (np. kwota rabatu), wylicz z wymagania i zapisz obliczenie w komentarzu: rabat 20% z 4,99 zł to 1,00 zł po zaokrągleniu (P11).
 - Po wysłaniu formularza z błędem nie używaj `page.reload()`, bo wyśle formularz jeszcze raz: wejdź na stronę od nowa przez link albo `page.goto` (ćw. 08).
+- Dla wymagania „koszyk się nie zmienia” zacznij od pustego koszyka (`beforeEach`) i sprawdź „Pozycji: 0, razem: 0,00 zł” oraz `toHaveCount(0)` dla wiersza produktu. W kroku 7 zamiast tekstu zmień wartość graniczną na dozwoloną (1001 → 1000): test ma paść, gdy aplikacja przyjmie ilość (ćw. 12b).
+- `npm run typecheck` zgłasza błędy w `tests/zepsute/03-lista-zamowien.spec.ts`. Ten plik jest zepsuty celowo do ćwiczeń, więc liczą się tylko błędy w Twoim pliku (ćw. 12b).

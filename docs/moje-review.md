@@ -142,7 +142,7 @@ Uwaga: hotfix nie był „tylko tekstami”. Zmiana tekstów popsuła 15 testów
 
 ## Ćwiczenie 12: spotkanie „wydajemy czy nie” (szkic, 5 minut)
 
-**1. Co pokrywa pakiet (1,5 min).** `tests/projekt/`: 9 scenariuszy, 16 testów. E2E: P2 (koszyk wymaga logowania), P4 (brak uprawnień do panelu), P9 (cena promocyjna w 3 miejscach), P11 (kody rabatowe), P15 (statusy w panelu admina), P16 (ilość z karty). API: P5 (katalog), P13 (odliczanie, 26.11 i 27.11 po zmianie Bożeny), P14 (zamówienie firmowe i faktura). `--repeat-each=3`: 48 passed. Nie pokrywamy: P1, P3, P6–P8, P10, P12 (brak czasu; P10 częściowo w ćwiczeniu 08 „Biuro Mikołaja”). Testy z kontem admin (P14, P15) biegną tylko lokalnie.
+**1. Co pokrywa pakiet (1,5 min).** `tests/projekt/`: 9 scenariuszy, 17 testów. E2E: P2 (koszyk wymaga logowania), P4 (brak uprawnień do panelu), P9 (cena promocyjna w 3 miejscach), P11 (kody rabatowe), P15 (statusy w panelu admina), P16 (ilość z karty, także granica 1001). API: P5 (katalog), P13 (odliczanie, 26.11 i 27.11 po zmianie Bożeny), P14 (zamówienie firmowe i faktura). `--repeat-each=3`: 51 passed. Nie pokrywamy: P1, P3, P6–P8, P10, P12 (brak czasu; P10 częściowo w ćwiczeniu 08 „Biuro Mikołaja”). Testy z kontem admin (P14, P15) biegną tylko lokalnie.
 
 **2. Co znaleźliśmy (2 min).**
 - Polowanie na `rc` (konto tester08): 6 zaliczonych błędów: wygasły kod JESIEN10 przyjęty (#2), NIP sprzedawcy na fakturze zamiast NIP-u nabywcy (#3), sortowanie po cenie jak tekst (#5), kod pocztowy 00950 w „Moich adresach” (#6), nowy adres sam domyślny (#7), 200 i `{}` zamiast 404 dla nieistniejącego zamówienia (#8). Do tego 2 niespodzianki. Podwójna promocja w koszyku (krem 21,11 zł zamiast 26,39 zł) nie zaliczona przez trenera.
@@ -155,3 +155,22 @@ Uwaga: hotfix nie był „tylko tekstami”. Zmiana tekstów popsuła 15 testów
 - Wydajemy, gdy oba testy będą zielone na nowej wersji i pakiet `tests/projekt` przejdzie 3 razy pod rząd.
 
 **Pokaz:** P16 zielony na wersji zwykłej (`npx playwright test tests/projekt/p16`) i czerwony z `$env:APP_VERSION="hotfix"` (aplikacja uruchomiona z tą zmienną).
+
+## Ćwiczenie 12b dla szybszych
+
+**Nowy test w P16:** „ilość 1001 z karty produktu pokazuje komunikat o zakresie i nie zmienia koszyka” (`tests/projekt/p16-ilosc-z-karty.spec.ts`). Sprawdza alert „Ilość musi być liczbą całkowitą od 1 do 1000.” i pusty koszyk („Pozycji: 0, razem: 0,00 zł”). Pada, gdy wpiszemy 1000 zamiast 1001.
+
+### Asercje, które padną przy następnej zmianie Bożeny (notatki na prezentację)
+
+Zależne od **daty**:
+- `tests/projekt/p13-odliczanie.spec.ts`: tablica `daty` (26.11 → 1 dzień, 27.11 → „trwa!”). Bezpieczne, bo data idzie w nagłówku `X-Namssor-Teraz`, ale każda nowa data od Bożeny to zmiana tablicy.
+- `tests/projekt/p14-zamowienie-firmowe-api.spec.ts`: numer faktury `FV/2026/<numer>`. Padnie 1 stycznia 2027.
+- `tests/polowanie/kod-jesien10-wygasl.spec.ts`: „Kod JESIEN10 wygasł 31.10.2026.”. Zakłada, że dziś jest po 31.10.2026.
+- `tests/projekt/p9-cena-promocyjna.spec.ts`, `tests/projekt/p11-kod-rabatowy.spec.ts`, `tests/polowanie/cena-promocyjna-w-koszyku.spec.ts`: cena 26,39 zł (-20%) i kod CZARNY20. Padną, jeśli promocja ma datę końca albo Bożena zmieni rabat.
+
+Zależne od **ilości**:
+- `tests/projekt/p16-ilosc-z-karty.spec.ts`: 24 sztuki, „959,76 zł”, „Pozycji: 1, razem: 959,76 zł” oraz limit 1000 w nowym teście.
+- `tests/cwiczenia/08-biuro-mikolaja.spec.ts`: 10 kalendarzy, „399,90 zł” w koszyku i na fakturze (scenariusz sprzed zmiany na 24 sztuki).
+- `tests/cwiczenia/09-api.spec.ts`: limit API „Ilość musi być liczbą całkowitą od 1 do 10” (inny niż 1000 na karcie produktu).
+- `tests/projekt/p11-kod-rabatowy.spec.ts`, `tests/polowanie/kod-jesien10-wygasl.spec.ts`: „Pozycji: 1, razem: 4,99 zł” (jedno mydło).
+- `tests/cwiczenia/10-filtr-kategorii.spec.ts`: „dokładnie 3 produkty” w kategorii Dziecko. Padnie po dodaniu produktu do katalogu.

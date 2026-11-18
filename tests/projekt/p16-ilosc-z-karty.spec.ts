@@ -30,4 +30,19 @@ test.describe('P16: ilość z karty produktu', () => {
     // Jedna pozycja w koszyku, więc „razem” równa się sumie kolumny „Wartość”
     await expect(page.getByText('Pozycji: 1, razem: 959,76 zł', { exact: true })).toBeVisible();
   });
+
+  // Ćw. 12b „Dla szybszych”: przypadek graniczny, 1001 to o jedną sztukę ponad limit 1000.
+  test('ilość 1001 z karty produktu pokazuje komunikat o zakresie i nie zmienia koszyka', async ({ page }) => {
+    await page.goto('/produkt/21');
+    await expect(page.getByRole('heading', { name: 'Kalendarz adwentowy 2026', exact: true })).toBeVisible();
+    await page.getByLabel('Ilość').fill('1001');
+    await page.getByRole('button', { name: 'Dodaj do koszyka' }).click();
+
+    await expect(page.getByRole('alert')).toHaveText('Ilość musi być liczbą całkowitą od 1 do 1000.');
+
+    // Koszyk był pusty przed testem (beforeEach), więc po odrzuceniu ilości nadal ma 0 pozycji
+    await page.getByRole('link', { name: 'Koszyk' }).click();
+    await expect(page.getByText('Pozycji: 0, razem: 0,00 zł', { exact: true })).toBeVisible();
+    await expect(page.getByRole('row').filter({ hasText: 'Kalendarz adwentowy 2026' })).toHaveCount(0);
+  });
 });
