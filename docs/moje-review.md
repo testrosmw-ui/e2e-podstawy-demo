@@ -84,3 +84,24 @@ Test `tests/cwiczenia/10-filtr-kategorii.spec.ts` napisany przez `/test-e2e`. Pr
 
 - **Kto byłby właścicielem skilla?** Zespół QA, a w nim jedna wskazana osoba (opiekun repo testów). Ona zatwierdza zmiany i odpowiada za to, że skill pasuje do aktualnego `CLAUDE.md` i listy kontrolnej.
 - **Jak zgłosić poprawkę, gdy skill napisze zły test?** Zgłoszenie (issue albo pull request) w repo marketplace: nazwa i wersja skilla, polecenie, którym go wywołano, zły test i punkt listy kontrolnej, który nie przeszedł, oraz propozycja zmiany kroku w `SKILL.md` jako polecenia. Opiekun robi review, zmienia skill i wydaje nową wersję dla całego zespołu.
+
+## Ćwiczenie 11: funkcja zaloguj i uruchamianie wybranych testów
+
+### Odpowiedzi z kroku 1 (`tests/pomocnicze/logowanie.ts`)
+
+- **Którym kontem loguje `await zaloguj(page);` bez zmiennych?** `user` / `user123`: linie 10–11 biorą `APP_USER` i `APP_PASSWORD`, a gdy ich nie ma, wartości domyślne.
+- **Jak zalogować inne konto bez zmiany pliku?** (1) Zmienne środowiskowe `$env:APP_USER` i `$env:APP_PASSWORD` przed uruchomieniem testów. (2) Parametry w wywołaniu: `await zaloguj(page, 'biuro', 'biuro123');`.
+- **Co się stanie przy złym haśle?** Test pada od razu w funkcji `zaloguj`, po czasie oczekiwania asercji, z błędem `toBeVisible` na „Zalogowano jako …”. Decyduje linia 22: `await expect(page.getByText(`Zalogowano jako ${login}`)).toBeVisible();`. Bez niej test szedłby dalej niezalogowany.
+
+### Polecenia uruchamiania (PowerShell)
+
+| Co | Polecenie |
+|---|---|
+| Jeden katalog | `npx playwright test tests/czytanie` |
+| Testy z tagiem | `npx playwright test --grep "@zamowienia"` |
+| Wszystko poza tagiem | `npx playwright test --grep-invert "@zamowienia"` |
+| Wybrana przeglądarka | `npx playwright test tests/czytanie --project=chromium` |
+| Z oknem przeglądarki | `npx playwright test tests/czytanie/01-wyszukiwarka.spec.ts --headed` |
+| Tryb UI | `npx playwright test --ui` |
+| Wspólny serwer | `$env:BASE_URL="https://namssor-376292984721.europe-central2.run.app"`, potem polecenie testów, na koniec `Remove-Item Env:BASE_URL` |
+| Konto pary | `$env:APP_USER="tester05"` i `$env:APP_PASSWORD="czarny-piatek-2026"`, potem polecenie testów, na koniec `Remove-Item Env:APP_USER` i `Remove-Item Env:APP_PASSWORD` |
