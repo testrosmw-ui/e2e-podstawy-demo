@@ -105,3 +105,37 @@ Test `tests/cwiczenia/10-filtr-kategorii.spec.ts` napisany przez `/test-e2e`. Pr
 | Tryb UI | `npx playwright test --ui` |
 | Wspólny serwer | `$env:BASE_URL="https://namssor-376292984721.europe-central2.run.app"`, potem polecenie testów, na koniec `Remove-Item Env:BASE_URL` |
 | Konto pary | `$env:APP_USER="tester05"` i `$env:APP_PASSWORD="czarny-piatek-2026"`, potem polecenie testów, na koniec `Remove-Item Env:APP_USER` i `Remove-Item Env:APP_PASSWORD` |
+
+## Ćwiczenie 12c: hotfix Mirka
+
+Przed hotfiksem: `88 passed`, `8 skipped`. Z `APP_VERSION=hotfix`: `17 failed`, `8 skipped`, `65 passed`.
+
+### Diagnoza
+
+| Test (plik i linia) | Pierwsza linia błędu | Przyczyna | Decyzja |
+|---|---|---|---|
+| `cwiczenia/04-adres-walidacja:6`, `cwiczenia/08-zmiana-adresu:44`, `review/03-adres-walidacja:7`, `review/05-zmiana-adresu:6`, `test-4:3` | `locator.click: Test timeout` na przycisku „Zapisz adres” | przycisk ma napis „Zapisz”: zmieniony tekst | test do poprawy |
+| `cwiczenia/04-karta-produktu:7` i `:44`, `cwiczenia/06-platnosc-w-ramce:28`, `cwiczenia/08-biuro-mikolaja:11` (pierwszy błąd) | „Dodano do koszyka: …” not found | komunikat „Produkt w koszyku: …”: zmieniony tekst | test do poprawy |
+| `czytanie/05-karta-produktu:13` i `:26`, `smoke:36` | `Received: "Na stanie: 100 szt."` / `"Chwilowo brak"` | nowe teksty dostępności: zmieniony tekst | test do poprawy |
+| `polowanie/kod-jesien10-wygasl:22`, `review/06-kod-rabatowy:6`, `projekt/p11-kod-rabatowy:29` | `locator.click: Test timeout` na „Zastosuj kod” | przycisk „Użyj kodu”: zmieniony tekst | test do poprawy |
+| `projekt/p15-status-zamowienia:19` | `locator.selectOption: Test timeout` na „Opłacone” | opcja „Zapłacone” (podpowiedź pod polem nadal mówi „Opłacone”): zmieniony tekst | test do poprawy |
+| `projekt/p16-ilosc-z-karty:20`, `cwiczenia/08-biuro-mikolaja:11` (po poprawie tekstów) | „Pozycji: 1, razem: 959,76 zł” / „399,90 zł” not found | koszyk liczy źle: suma „razem” to cena jednej sztuki | **błąd do zgłoszenia** |
+
+Gałąź `hotfix-testy` (commit „Testy pod hotfix: nowe etykiety”): z hotfiksem `86 passed`, `2 failed` (tylko błąd sumy), `8 skipped`. Na `main` bez hotfiksu: `88 passed`.
+
+### Zgłoszenie dla Mirka
+
+```
+Tytuł: Suma „razem” w koszyku liczy jedną sztukę zamiast całej pozycji
+Wersja: hotfix
+Kroki: 1. Zaloguj się jako user / user123.
+       2. Otwórz kartę „Kalendarz adwentowy 2026”, wpisz „Ilość” 24, kliknij „Dodaj do koszyka”.
+       3. Otwórz „Koszyk”.
+Oczekiwany wynik: wiersz: ilość 24, wartość 959,76 zł; pod tabelą „Pozycji: 1, razem: 959,76 zł”.
+Faktyczny wynik: wiersz poprawny (24, 959,76 zł), ale „Pozycji: 1, razem: 39,99 zł”. Klient zapłaciłby za 1 sztukę zamiast 24.
+Test: tests/projekt/p16-ilosc-z-karty.spec.ts › P16: ilość z karty produktu › 24 kalendarze adwentowe z karty produktu
+      dają w koszyku ilość 24 i wartość 959,76 zł (failed na hotfix, passed bez APP_VERSION).
+      Drugi dowód: tests/cwiczenia/08-biuro-mikolaja.spec.ts (10 kalendarzy: „razem” 39,99 zł zamiast 399,90 zł).
+```
+
+Uwaga: hotfix nie był „tylko tekstami”. Zmiana tekstów popsuła 15 testów w 14 plikach, bo te same napisy stoją w wielu plikach.
