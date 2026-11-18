@@ -140,6 +140,29 @@ Test: tests/projekt/p16-ilosc-z-karty.spec.ts › P16: ilość z karty produktu 
 
 Uwaga: hotfix nie był „tylko tekstami”. Zmiana tekstów popsuła 15 testów w 14 plikach, bo te same napisy stoją w wielu plikach.
 
+### Dla szybszych: ile testów poprawiliśmy przez jedną zmianę tekstu
+
+Pięć zmian tekstu w hotfiksie popsuło 15 testów w 14 plikach:
+
+| Zmieniony tekst | Pliki do poprawy |
+|---|---|
+| „Zapisz adres” → „Zapisz” | 5 |
+| „Dodano do koszyka” → „Produkt w koszyku” | 4 |
+| „Dostępny” / „Niedostępny” → „Na stanie:” / „Chwilowo brak” | 3 |
+| „Zastosuj kod” → „Użyj kodu” | 3 (w P11 trzy razy w jednym pliku) |
+| „Opłacone” → „Zapłacone” | 1 |
+
+Dlaczego tyle: każdy test sam wpisuje napis przycisku albo komunikatu. Logowanie nie padło ani razu, bo stoi w jednym miejscu (`zaloguj`).
+
+**Przepisany test:** `tests/projekt/p11-kod-rabatowy.spec.ts` używa funkcji `uzyjKoduRabatowego(page, kod)` z `tests/pomocnicze/koszyk.ts`. Napis „Zastosuj kod” stoi tylko tam. Sprawdzenie:
+- wersja zwykła: `3 passed`;
+- hotfix: `1 failed` (czeka na przycisk „Zastosuj kod”);
+- hotfix po zmianie jednej linii w `koszyk.ts` na „Użyj kodu”: `3 passed` (zmianę cofnęliśmy, bo `main` jest bez hotfiksu).
+
+Pozostałe pliki z „Zastosuj kod” (`polowanie/kod-jesien10-wygasl`, `review/06-kod-rabatowy`, `cwiczenia/04-karta-produktu`) można przepiąć tak samo.
+
+Kryterium 4 po powrocie na `main` (bez `APP_VERSION`, po `npm run db:reset`): `89 passed`, `8 skipped`.
+
 ## Ćwiczenie 12: spotkanie „wydajemy czy nie” (szkic, 5 minut)
 
 **1. Co pokrywa pakiet (1,5 min).** `tests/projekt/`: 9 scenariuszy, 17 testów. E2E: P2 (koszyk wymaga logowania), P4 (brak uprawnień do panelu), P9 (cena promocyjna w 3 miejscach), P11 (kody rabatowe), P15 (statusy w panelu admina), P16 (ilość z karty, także granica 1001). API: P5 (katalog), P13 (odliczanie, 26.11 i 27.11 po zmianie Bożeny), P14 (zamówienie firmowe i faktura). `--repeat-each=3`: 51 passed. Nie pokrywamy: P1, P3, P6–P8, P10, P12 (brak czasu; P10 częściowo w ćwiczeniu 08 „Biuro Mikołaja”). Testy z kontem admin (P14, P15) biegną tylko lokalnie.
