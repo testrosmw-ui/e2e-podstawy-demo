@@ -170,7 +170,7 @@ Kryterium 4 po powrocie na `main` (bez `APP_VERSION`, po `npm run db:reset`): `8
 **2. Co znaleźliśmy (2 min).**
 - Polowanie na `rc` (konto tester08): 6 zaliczonych błędów: wygasły kod JESIEN10 przyjęty (#2), NIP sprzedawcy na fakturze zamiast NIP-u nabywcy (#3), sortowanie po cenie jak tekst (#5), kod pocztowy 00950 w „Moich adresach” (#6), nowy adres sam domyślny (#7), 200 i `{}` zamiast 404 dla nieistniejącego zamówienia (#8). Do tego 2 niespodzianki. Podwójna promocja w koszyku (krem 21,11 zł zamiast 26,39 zł) nie zaliczona przez trenera.
 - Hotfix Mirka: nie tylko teksty. Suma „razem” w koszyku liczy 1 sztukę: 24 kalendarze = 39,99 zł zamiast 959,76 zł. Test: `p16-ilosc-z-karty.spec.ts` (failed na hotfix, passed bez niego).
-- Review krzyżowe: (uzupełnić po 13:30).
+- Review krzyżowe: (uzupełnić po 13:30). Jedno zdanie: najważniejsze znalezisko recenzentów (plik i linia, waga z karty punktacji) i commit `Review krzyżowe: …` z poprawką. Jeśli nic nie znaleźli: „recenzenci nie znaleźli luk, suma wag 0”.
 
 **3. Rekomendacja (1 min): nie wydajemy ani `rc`, ani hotfiksu.**
 - Hotfix: test „24 kalendarze adwentowe z karty produktu dają w koszyku ilość 24 i wartość 959,76 zł” jest czerwony: klient Biura Mikołaja zapłaciłby za 1 kalendarz zamiast 24.
@@ -178,6 +178,12 @@ Kryterium 4 po powrocie na `main` (bez `APP_VERSION`, po `npm run db:reset`): `8
 - Wydajemy, gdy oba testy będą zielone na nowej wersji i pakiet `tests/projekt` przejdzie 3 razy pod rząd.
 
 **Pokaz:** P16 zielony na wersji zwykłej (`npx playwright test tests/projekt/p16`) i czerwony z `$env:APP_VERSION="hotfix"` (aplikacja uruchomiona z tą zmienną).
+
+**4. Pytanie od Bożeny (0,5 min): przygotowane odpowiedzi.**
+- „Czy hotfix to tylko teksty?” Nie. Pięć zmian tekstu (15 testów do poprawy, poprawione na gałęzi `hotfix-testy`) i jeden błąd w liczeniu sumy koszyka (P16 czerwony).
+- „Ile trwa sprawdzenie poprawionej wersji?” Pakiet `tests/projekt` (projekt i polowanie) przechodzi w mniej niż minutę, także 3 razy pod rząd.
+- „Czego nie sprawdzamy?” P1, P3, P6–P8, P10, P12 i testów z kontem admin na wspólnym serwerze (hasło zna tylko trener).
+- „Czy testy przeżyją kolejną zmianę?” Daty i ilości stoją w asercjach (lista niżej, „Asercje, które padną…”). Napis przycisku kodu rabatowego stoi już w jednym miejscu (`tests/pomocnicze/koszyk.ts`).
 
 ## Ćwiczenie 12b dla szybszych
 
