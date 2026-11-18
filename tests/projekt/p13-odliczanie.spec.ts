@@ -3,15 +3,24 @@ import { test, expect } from '@playwright/test';
 // P13. Odliczanie do Czarnego Piątku (docs/projekt.md). Endpoint jest publiczny.
 // Nagłówek X-Namssor-Teraz ustawia „dzisiejszą” datę tylko dla jednego żądania (opis w /api/docs).
 
-test.describe('P13: odliczanie do Czarnego Piątku', () => {
-  test('data 2026-11-20 daje 7 dni do Czarnego Piątku', async ({ request }) => {
-    const odpowiedz = await request.get('/api/promocja', { headers: { 'X-Namssor-Teraz': '2026-11-20' } });
+// Zmiana wymagań Bożeny z 13:00: zamiast 20.11 dzień przed startem (26.11) i sam start (27.11).
+const daty = [
+  { data: '2026-11-26', dni: 1, komunikat: 'Czarny Piątek w Namssorze startuje 27.11.2026. Do startu promocji został 1 dzień.' },
+  { data: '2026-11-27', dni: 0, komunikat: 'Czarny Piątek w Namssorze trwa! Tylko dziś najniższe ceny.' },
+];
 
-    expect(odpowiedz.status()).toBe(200);
-    const promocja = await odpowiedz.json();
-    expect(promocja.days_left).toBe(7);
-    expect(promocja.message).toBe('Czarny Piątek w Namssorze startuje 27.11.2026. Do startu promocji zostało 7 dni.');
-  });
+test.describe('P13: odliczanie do Czarnego Piątku', () => {
+  // Osobny test dla każdej daty; data w nazwie, żeby nazwy testów się nie powtarzały
+  for (const { data, dni, komunikat } of daty) {
+    test(`data ${data} daje days_left ${dni} i komunikat dla tego dnia`, async ({ request }) => {
+      const odpowiedz = await request.get('/api/promocja', { headers: { 'X-Namssor-Teraz': data } });
+
+      expect(odpowiedz.status()).toBe(200);
+      const promocja = await odpowiedz.json();
+      expect(promocja.days_left).toBe(dni);
+      expect(promocja.message).toBe(komunikat);
+    });
+  }
 
   test('nagłówek z datą „jutro” daje 400', async ({ request }) => {
     const odpowiedz = await request.get('/api/promocja', { headers: { 'X-Namssor-Teraz': 'jutro' } });
