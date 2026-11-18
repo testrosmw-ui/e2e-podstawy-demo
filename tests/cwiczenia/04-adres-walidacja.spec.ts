@@ -16,7 +16,7 @@ test('błędny kod pocztowy blokuje zapis adresu', async ({ page }) => {
 
   // Krok 3: kod pocztowy bez myślnika i próba zapisu.
   await page.getByRole('textbox', { name: 'Kod pocztowy' }).fill('00000');
-  await page.getByRole('button', { name: 'Zapisz adres' }).click();
+  await page.getByRole('button', { name: 'Zapisz', exact: true }).click();
 
   // Krok 4: podsumowanie błędów nad formularzem.
   await expect(page.getByText('Popraw błędy w formularzu (1).')).toBeVisible();

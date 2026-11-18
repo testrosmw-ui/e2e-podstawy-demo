@@ -16,14 +16,14 @@ test.describe('P15: status zamówienia w panelu admina', { tag: '@admin' }, () =
     numer = (await odpowiedz.json()).number;
   });
 
-  test('admin zmienia status na Opłacone, potem na Wysłane, a klient widzi shipped', async ({ page, request }) => {
+  test('admin zmienia status na Zapłacone, potem na Wysłane, a klient widzi shipped', async ({ page, request }) => {
     await zalogujJakoAdmin(page);
     await page.goto(`/admin/zamowienia/${numer}`);
     await expect(page.getByText('Status: Nowe', { exact: true })).toBeVisible();
 
-    await page.getByLabel('Status zamówienia').selectOption('Opłacone');
+    await page.getByLabel('Status zamówienia').selectOption('Zapłacone');
     await page.getByRole('button', { name: 'Zapisz status' }).click();
-    await expect(page.getByText('Status: Opłacone', { exact: true })).toBeVisible();
+    await expect(page.getByText('Status: Zapłacone', { exact: true })).toBeVisible();
 
     await page.getByLabel('Status zamówienia').selectOption('Wysłane');
     await page.getByRole('button', { name: 'Zapisz status' }).click();

@@ -14,7 +14,7 @@ test('karta produktu pokazuje opis i dostępność', async ({ page }) => {
   await otworzKarteProduktu(page, 'Szampon nawilżający');
 
   await expect(page.getByTestId('product-description')).toContainText('400 ml');
-  await expect(page.getByTestId('product-availability')).toContainText('Dostępny');
+  await expect(page.getByTestId('product-availability')).toContainText('Na stanie:');
 });
 
 test('cena na karcie produktu jest taka sama jak na kafelku', async ({ page }) => {
@@ -26,6 +26,6 @@ test('cena na karcie produktu jest taka sama jak na kafelku', async ({ page }) =
 test('produktu niedostępnego nie da się dodać do koszyka z karty produktu', async ({ page }) => {
   await otworzKarteProduktu(page, 'Maska do włosów z olejem arganowym');
 
-  await expect(page.getByTestId('product-availability')).toHaveText('Niedostępny');
+  await expect(page.getByTestId('product-availability')).toHaveText('Chwilowo brak');
   await expect(page.getByRole('button', { name: 'Dodaj do koszyka' })).toBeDisabled();
 });

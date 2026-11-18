@@ -24,7 +24,7 @@ test('wygasły kod JESIEN10 jest odrzucony i nie daje rabatu', async ({ page }) 
   await expect(page.getByText('Pozycji: 1, razem: 4,99 zł', { exact: true })).toBeVisible();
 
   await page.getByLabel('Kod rabatowy').fill('JESIEN10');
-  await page.getByRole('button', { name: 'Zastosuj kod' }).click();
+  await page.getByRole('button', { name: 'Użyj kodu' }).click();
 
   await expect(page.getByText('Kod JESIEN10 wygasł 31.10.2026.', { exact: true })).toBeVisible();
   // Bez rabatu: suma bez zmian i brak linii „Przed rabatem…”

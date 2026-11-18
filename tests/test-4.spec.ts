@@ -12,6 +12,6 @@ test('test', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Kod pocztowy' }).dblclick();
   await page.getByRole('textbox', { name: 'Kod pocztowy' }).click();
   await page.getByRole('textbox', { name: 'Kod pocztowy' }).fill('00-000');
-  await page.getByRole('button', { name: 'Zapisz adres' }).click();
+  await page.getByRole('button', { name: 'Zapisz', exact: true }).click();
   await expect(page.getByTestId('success')).toBeVisible();
 });

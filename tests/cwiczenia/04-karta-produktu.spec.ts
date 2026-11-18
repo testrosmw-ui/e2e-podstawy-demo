@@ -28,7 +28,7 @@ test('cena promocyjna kremu jest taka sama na kafelku, karcie produktu i w koszy
 
   // TODO 4: dodaj krem do koszyka i sprawdź komunikat (znika po kilku sekundach, więc od razu po kliknięciu).
   await page.getByRole('button', { name: 'Dodaj do koszyka' }).click();
-  await expect(page.getByTestId('flash')).toHaveText('Dodano do koszyka: Krem do twarzy na dzień');
+  await expect(page.getByTestId('flash')).toHaveText('Produkt w koszyku: Krem do twarzy na dzień');
 
   // TODO 5: przejdź do koszyka i sprawdź cenę w wierszu kremu.
   await page.getByRole('link', { name: 'Koszyk' }).click();
@@ -52,12 +52,12 @@ test('kod CZARNY20 obniża sumę do zapłaty za krem do 21,11 zł', async ({ pag
 
   // Krem do koszyka prosto z tabeli produktów.
   await page.getByRole('button', { name: 'Dodaj do koszyka: Krem do twarzy na dzień' }).click();
-  await expect(page.getByTestId('flash')).toHaveText('Dodano do koszyka: Krem do twarzy na dzień');
+  await expect(page.getByTestId('flash')).toHaveText('Produkt w koszyku: Krem do twarzy na dzień');
 
   // Wpisz kod rabatowy w koszyku.
   await page.getByRole('link', { name: 'Koszyk' }).click();
   await page.getByLabel('Kod rabatowy').fill('CZARNY20');
-  await page.getByRole('button', { name: 'Zastosuj kod' }).click();
+  await page.getByRole('button', { name: 'Użyj kodu' }).click();
 
   // Kod przyjęty, a suma spada z 26,39 zł o 20%.
   await expect(page.getByText('Kod CZARNY20 przyjęty: -20% na całe zamówienie.')).toBeVisible();

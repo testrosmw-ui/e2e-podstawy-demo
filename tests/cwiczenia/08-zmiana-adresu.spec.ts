@@ -52,7 +52,7 @@ test.describe('Zmiana adresu dostawy', () => {
     await page.getByLabel('Kod pocztowy').fill('31-001');
     await page.getByLabel('Miasto').fill('Kraków');
     await page.getByLabel('Telefon').fill('600 200 300');
-    await page.getByRole('button', { name: 'Zapisz adres' }).click();
+    await page.getByRole('button', { name: 'Zapisz', exact: true }).click();
 
     await expect(page.getByRole('status')).toHaveText('Zapisano adres dostawy.');
     await expect(page).toHaveURL(/zapisano=1/);
@@ -70,7 +70,7 @@ test.describe('Zmiana adresu dostawy', () => {
     await expect(page.getByLabel('Kod pocztowy')).toHaveValue('00-001');
 
     await page.getByLabel('Kod pocztowy').fill('31001');
-    await page.getByRole('button', { name: 'Zapisz adres' }).click();
+    await page.getByRole('button', { name: 'Zapisz', exact: true }).click();
 
     await expect(page.getByRole('alert')).toHaveText('Popraw błędy w formularzu (1).');
     await expect(page.getByText('Kod pocztowy musi mieć format 00-000', { exact: true })).toBeVisible();
@@ -90,7 +90,7 @@ test.describe('Zmiana adresu dostawy', () => {
     await expect(page.getByLabel('Telefon')).toHaveValue('500 100 200');
 
     await page.getByLabel('Telefon').fill('12345');
-    await page.getByRole('button', { name: 'Zapisz adres' }).click();
+    await page.getByRole('button', { name: 'Zapisz', exact: true }).click();
 
     await expect(page.getByRole('alert')).toHaveText('Popraw błędy w formularzu (1).');
     await expect(page.getByText('Telefon musi mieć 9 cyfr (opcjonalnie z +48)', { exact: true })).toBeVisible();
@@ -110,7 +110,7 @@ test.describe('Zmiana adresu dostawy', () => {
     await expect(page.getByLabel('Miasto')).toHaveValue('Warszawa');
 
     await page.getByLabel('Miasto').fill('');
-    await page.getByRole('button', { name: 'Zapisz adres' }).click();
+    await page.getByRole('button', { name: 'Zapisz', exact: true }).click();
 
     await expect(page.getByRole('alert')).toHaveText('Popraw błędy w formularzu (1).');
     await expect(page.getByText('Podaj miasto', { exact: true })).toBeVisible();

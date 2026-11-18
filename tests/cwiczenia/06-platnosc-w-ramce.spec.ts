@@ -22,7 +22,7 @@ test.beforeEach(async ({ page }) => {
 
   // Płacić można tylko za niepusty koszyk.
   await page.getByRole('button', { name: 'Dodaj do koszyka: Maseczka glinkowa' }).click();
-  await expect(page.getByText('Dodano do koszyka: Maseczka glinkowa')).toBeVisible();
+  await expect(page.getByText('Produkt w koszyku: Maseczka glinkowa')).toBeVisible();
 });
 
 test('karta odrzucona przez bank pokazuje komunikat w ramce', async ({ page }) => {

@@ -23,7 +23,7 @@ test('Biuro Mikołaja: zamówienie na firmę, status „Wysłane” i faktura z 
   await page.goto('/produkt/21');
   await page.getByLabel('Ilość').fill('10');
   await page.getByRole('button', { name: 'Dodaj do koszyka' }).click();
-  await expect(page.getByText('Dodano do koszyka: Kalendarz adwentowy 2026')).toBeVisible();
+  await expect(page.getByText('Produkt w koszyku: Kalendarz adwentowy 2026')).toBeVisible();
 
   // Krok 3. Koszyk: jedna pozycja, 10 sztuk po 39,99 zł
   await page.getByRole('link', { name: 'Koszyk' }).click();
@@ -66,10 +66,10 @@ test('Biuro Mikołaja: zamówienie na firmę, status „Wysłane” i faktura z 
   await expect(page.getByText('Status: Nowe', { exact: true })).toBeVisible();
   await expect(page.getByLabel('Status zamówienia')).toBeVisible();
 
-  // Krok 7. Zmiana statusu na „Opłacone”
-  await page.getByLabel('Status zamówienia').selectOption('Opłacone');
+  // Krok 7. Zmiana statusu na „Zapłacone”
+  await page.getByLabel('Status zamówienia').selectOption('Zapłacone');
   await page.getByRole('button', { name: 'Zapisz status' }).click();
-  await expect(page.getByText('Status: Opłacone', { exact: true })).toBeVisible();
+  await expect(page.getByText('Status: Zapłacone', { exact: true })).toBeVisible();
 
   // Krok 8. Zmiana statusu na „Wysłane”
   await page.getByLabel('Status zamówienia').selectOption('Wysłane');

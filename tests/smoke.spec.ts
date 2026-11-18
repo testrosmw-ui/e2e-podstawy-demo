@@ -38,6 +38,6 @@ test('karta dostępnego produktu ma opis i aktywny przycisk „Dodaj do koszyka�
 
   await expect(page.getByRole('heading', { name: 'Szampon nawilżający' })).toBeVisible();
   await expect(page.getByTestId('product-description')).not.toBeEmpty();
-  await expect(page.getByTestId('product-availability')).toContainText('Dostępny');
+  await expect(page.getByTestId('product-availability')).toContainText('Na stanie:');
   await expect(page.getByRole('button', { name: 'Dodaj do koszyka' })).toBeEnabled();
 });

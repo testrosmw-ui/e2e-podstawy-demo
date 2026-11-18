@@ -18,7 +18,7 @@ test('błędny kod pocztowy blokuje zapis adresu', async ({ page }) => {
   await page.getByLabel('Kod pocztowy').fill('00000');
   await page.getByLabel('Miasto').fill('Warszawa');
   await page.getByLabel('Telefon').fill('500 100 200');
-  await page.getByRole('button', { name: 'Zapisz adres' }).click();
+  await page.getByRole('button', { name: 'Zapisz', exact: true }).click();
 
   // Formularz zgłasza błąd w ramce w stylu błędu
   await expect(page.getByRole('alert')).toContainText('Popraw błędy');
