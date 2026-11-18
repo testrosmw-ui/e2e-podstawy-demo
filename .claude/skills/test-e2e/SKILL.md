@@ -12,7 +12,7 @@ Zasady pisania kodu są w `CLAUDE.md`. Ta procedura mówi tylko, w jakiej kolejn
 2. Przejdź scenariusz w aplikacji (http://localhost:4100) przez Playwright MCP. Zapisz dokładne etykiety, przyciski i komunikaty, które widzisz. Gdy MCP nie działa, odczytaj je z kodu w `app/` i napisz o tym.
 3. Pokaż plan w punktach: nazwa testu, kroki, asercje z dokładnym tekstem, dane i sprzątanie. Przy każdej asercji podaj, który oczekiwany wynik z kroku 1 sprawdza. Zatrzymaj się i poczekaj na akceptację planu. Nie pisz kodu przed akceptacją.
 4. Napisz test w `tests/cwiczenia/` według zaakceptowanego planu. Oczekiwane wartości bierz z wymagania, nie ze strony.
-   Logowanie w przeglądarce rób funkcją `zaloguj` z `tests/pomocnicze/logowanie.ts`, nigdy przez wpisywanie loginu i hasła w teście:
+   Korzystaj z helpera do logowania `tests/pomocnicze/logowanie.ts`, zamiast wpisywać login i hasło ręcznie:
    - import: `import { zaloguj } from '../pomocnicze/logowanie';`
    - klient: `await zaloguj(page);`. Konto bierze się z `APP_USER` i `APP_PASSWORD` (plik `.env` albo `$env:` w oknie), domyślnie `user` / `user123`.
    - administrator: `await zalogujJakoAdmin(page);` (import z tego samego pliku). Konto bierze się z `APP_ADMIN_USER` i `APP_ADMIN_PASSWORD`, domyślnie `admin` / `admin123`.
