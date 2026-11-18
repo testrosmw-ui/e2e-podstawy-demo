@@ -4,8 +4,8 @@ Repo szkoleniowe: aplikacja Namssor (`app/`, port 4100) i testy Playwright w Typ
 Testy czytają i oceniają testerzy, którzy dopiero uczą się kodu. Pisz prosto i czytelnie.
 
 ## Kod testu
-- Importuj wyłącznie `import { test, expect } from '@playwright/test';`.
-- Bez Page Object, własnych fixtures i funkcji pomocniczych, chyba że użytkownik o nie poprosi.
+- Importuj wyłącznie `import { test, expect } from '@playwright/test';` i do logowania `zaloguj` / `zalogujPrzezApi` z `tests/pomocnicze/logowanie.ts`.
+- Bez Page Object, własnych fixtures i innych funkcji pomocniczych, chyba że użytkownik o nie poprosi.
 - Lokatory w tej kolejności: `getByRole`, `getByLabel`, `getByText`, dopiero potem `getByTestId`.
   Nie używaj selektorów CSS i XPath, `id` ani klas.
 - Wiersz tabeli znajdź po treści: `page.getByRole('row').filter({ hasText: 'ZAM-1003' })`.

@@ -12,6 +12,12 @@ Zasady pisania kodu są w `CLAUDE.md`. Ta procedura mówi tylko, w jakiej kolejn
 2. Przejdź scenariusz w aplikacji (http://localhost:4100) przez Playwright MCP. Zapisz dokładne etykiety, przyciski i komunikaty, które widzisz. Gdy MCP nie działa, odczytaj je z kodu w `app/` i napisz o tym.
 3. Pokaż plan w punktach: nazwa testu, kroki, asercje z dokładnym tekstem, dane i sprzątanie. Przy każdej asercji podaj, który oczekiwany wynik z kroku 1 sprawdza. Zatrzymaj się i poczekaj na akceptację planu. Nie pisz kodu przed akceptacją.
 4. Napisz test w `tests/cwiczenia/` według zaakceptowanego planu. Oczekiwane wartości bierz z wymagania, nie ze strony.
+   Logowanie w przeglądarce rób funkcją `zaloguj` z `tests/pomocnicze/logowanie.ts`, nigdy przez wpisywanie loginu i hasła w teście:
+   - import: `import { zaloguj } from '../pomocnicze/logowanie';`
+   - klient: `await zaloguj(page);`. Konto bierze się z `APP_USER` i `APP_PASSWORD` (plik `.env` albo `$env:` w oknie), domyślnie `user` / `user123`.
+   - administrator: `await zaloguj(page, process.env.APP_ADMIN_USER ?? 'admin', process.env.APP_ADMIN_PASSWORD ?? 'admin123');`
+   - testy API: `await zalogujPrzezApi(request);` z tego samego pliku.
+   Po `zaloguj` jesteś na stronie głównej, więc przejdź na stronę testu przez `page.goto(...)`.
 5. Uruchom `npm run typecheck`. Popraw błędy w swoim pliku.
 6. Uruchom test dwa razy pod rząd poleceniem `npx playwright test <plik>`. Oba przebiegi muszą dać `passed`.
 7. Pokaż, że test potrafi paść: zmień na chwilę jedną oczekiwaną wartość, uruchom test, pokaż `failed`, przywróć wartość i uruchom jeszcze raz (`passed`).
