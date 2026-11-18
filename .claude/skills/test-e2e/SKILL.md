@@ -33,5 +33,9 @@ Przeczytaj je przed krokiem 3 i uwzględnij w planie.
 - Przekreślona stara cena to element `<s>`, który w Playwright nie ma roli: znajdź ją po `data-testid` (`tile-old-price`, `product-old-price`) i nie sprawdzaj samego przekreślenia, bo to styl (P9).
 - Na stronie „Produkty” sekcja „Oferta na Czarny Piątek” powtarza nazwy, ceny i kategorie produktów: szukaj w wierszu tabeli albo w kafelku `getByRole('article', { name })` (ćw. 10, P9).
 - Koszyk przygotowuj i sprzątaj przez API: `page.request.delete('/api/cart')` w `beforeEach` i `afterEach`, produkt dodawaj przez `POST /api/cart/items` (status 201), a testy jednego pliku na wspólnym koszyku oznacz `test.describe.configure({ mode: 'serial' })` (P9, P11).
+- Testy z różnych plików, które dzielą koszyk jednego konta, padają przy równoległym uruchomieniu (VS Code, tryb UI): trzymaj je w `tests/projekt/`, gdzie projekt `projekt` w `playwright.config.ts` ma `workers: 1` (P9, P11, P16).
+- Uruchamiaj `npx playwright test` zawsze z katalogu głównego repo: z innego katalogu Playwright nie wczyta `playwright.config.ts` i testy nie mają adresu aplikacji (P13–P16).
+- Gdy sprzątanie wymaga innego konta (np. anulowanie jako admin w teście API klienta), zaloguj je w osobnym kontekście `playwright.request.newContext()`, żeby nie zmienić sesji klienta (P14).
+- Gdy sprzątanie jest niemożliwe (wysłanego zamówienia nie da się anulować), napisz w komentarzu nad testem, co zostaje w bazie po każdym przebiegu (P15).
 - Wartość, której wymaganie nie podaje wprost (np. kwota rabatu), wylicz z wymagania i zapisz obliczenie w komentarzu: rabat 20% z 4,99 zł to 1,00 zł po zaokrągleniu (P11).
 - Po wysłaniu formularza z błędem nie używaj `page.reload()`, bo wyśle formularz jeszcze raz: wejdź na stronę od nowa przez link albo `page.goto` (ćw. 08).
