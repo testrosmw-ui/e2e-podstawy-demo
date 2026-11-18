@@ -48,7 +48,16 @@ export default defineConfig({
       // Testy bezpieczeństwa aplikacji (dla trenera) biegną tylko w projekcie „bezpieczenstwo”.
       // Testy z tests/zepsute (ćwiczenie 07) mają padać, więc biegną tylko w projekcie „zepsute”.
       // Testy tablicy wyników (dla trenera) biegną tylko w projekcie „tablica”.
-      testIgnore: ['**/bezpieczenstwo/**', '**/zepsute/**', '**/tablica/**'],
+      // Pakiet z tests/projekt biegnie w osobnym projekcie „projekt”.
+      testIgnore: ['**/bezpieczenstwo/**', '**/zepsute/**', '**/tablica/**', '**/projekt/**'],
+      use: { ...devices['Desktop Chrome'] },
+    },
+    // Ćwiczenie 12: testy projektu dzielą koszyk i zamówienia jednego konta,
+    // więc biegną jeden po drugim (workers: 1), także w trybie UI i w VS Code.
+    {
+      name: 'projekt',
+      testMatch: '**/projekt/**/*.spec.ts',
+      workers: 1,
       use: { ...devices['Desktop Chrome'] },
     },
     {
