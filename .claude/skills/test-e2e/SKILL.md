@@ -23,3 +23,15 @@ Zasady pisania kodu są w `CLAUDE.md`. Ta procedura mówi tylko, w jakiej kolejn
 7. Pokaż, że test potrafi paść: zmień na chwilę jedną oczekiwaną wartość, uruchom test, pokaż `failed`, przywróć wartość i uruchom jeszcze raz (`passed`).
 8. Przejdź test pytaniami z `docs/lista-kontrolna-review.md`. Pokaż tabelę: numer pytania, odpowiedź tak/nie, linia w pliku. Każde „nie” popraw przed oddaniem.
 9. Na końcu podaj ścieżkę pliku i polecenie, którym użytkownik uruchomi test. Podawaj wyniki dosłownie z terminala. Nie pisz „jestem pewien”.
+10. Popraw ten skill po każdym teście. Zapisz, co w tym teście poszło źle albo czego nie wiedziałeś na starcie (test padł z innego powodu niż oczekiwany, review coś znalazło, lokator nie zadziałał). Dopisz to jako jedno zdanie w trybie rozkazującym do sekcji „Wnioski z poprzednich testów” poniżej, z numerem testu w nawiasie. Nie dopisuj wniosku, który już tam jest. Gdy wniosek dotyczy kroku procedury, zmień ten krok. Pokaż użytkownikowi, co zmieniłeś w skillu.
+
+## Wnioski z poprzednich testów
+
+Przeczytaj je przed krokiem 3 i uwzględnij w planie.
+
+- W `getByRole(..., { name })` dodawaj `exact: true`, bo bez tego nazwa dopasowuje się do fragmentu (P4).
+- Przekreślona stara cena to element `<s>`, który w Playwright nie ma roli: znajdź ją po `data-testid` (`tile-old-price`, `product-old-price`) i nie sprawdzaj samego przekreślenia, bo to styl (P9).
+- Na stronie „Produkty” sekcja „Oferta na Czarny Piątek” powtarza nazwy, ceny i kategorie produktów: szukaj w wierszu tabeli albo w kafelku `getByRole('article', { name })` (ćw. 10, P9).
+- Koszyk przygotowuj i sprzątaj przez API: `page.request.delete('/api/cart')` w `beforeEach` i `afterEach`, produkt dodawaj przez `POST /api/cart/items` (status 201), a testy jednego pliku na wspólnym koszyku oznacz `test.describe.configure({ mode: 'serial' })` (P9, P11).
+- Wartość, której wymaganie nie podaje wprost (np. kwota rabatu), wylicz z wymagania i zapisz obliczenie w komentarzu: rabat 20% z 4,99 zł to 1,00 zł po zaokrągleniu (P11).
+- Po wysłaniu formularza z błędem nie używaj `page.reload()`, bo wyśle formularz jeszcze raz: wejdź na stronę od nowa przez link albo `page.goto` (ćw. 08).
